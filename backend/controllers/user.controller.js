@@ -5,7 +5,6 @@ import { z } from "zod";
 import config from "../config.js";
 import { Add } from "../models/add.model.js";
 
-
 // signup function code
 export const signup = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
@@ -78,22 +77,6 @@ export const login = async (req, res) => {
     }
 };
 
-
-// // logout code /bs cookies ko clear krna hai 
-// export const logout = (req, res) => {
-//     try {
-//         if(!req.cookies.jwt){
-//          return res.status(401).json({ errors: "Kindly login first" });
-//         }
-
-//         res.clearCookie("jwt");
-//         res.status(200).json({ message: "Logged out successfully" });
-//     } catch (error) {
-//         res.status(500).json({ errors: "Error in logout" });
-//         console.log("Error in logout", error);
-//     }
-// };
-
 export const logout = (req, res) => {
     try {
       res.clearCookie("jwt");
@@ -103,27 +86,6 @@ export const logout = (req, res) => {
       console.log("Error in logout", error);
     }
   };
-
-// export const logout = (req, res) => {
-//     try {
-//         if (!req.cookies.jwt) {
-//             return res.status(401).json({ errors: "Kindly login first" });
-//         }
-
-//         res.clearCookie("jwt", {
-//             httpOnly: true,
-//             secure: process.env.NODE_ENV === "production",
-//             sameSite: "Strict",
-//         });
-//         res.status(200).json({ message: "Logged out successfully" });
-//     } catch (error) {
-//         console.log("Error in logout", error);
-//         res.status(500).json({ errors: "Error in logout" });
-//     }
-// };
-
-
-
 
 // get all purchased courses here function code
 export const add = async (req, res) => {

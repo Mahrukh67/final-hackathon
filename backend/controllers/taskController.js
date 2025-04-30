@@ -1,38 +1,26 @@
-import { Task } from "../models/task.model.js";
-// import { Add } from "../models/add.model.js"; // Isko filhaal hata bhi sakte ho agar task mein nahi chahiye
-import { createTask, updateTask, deleteTask, getTask } from "../controllers/task.controller.js";
+import { Task } from "../models/task.js";
+import { createTask, updateTask, deleteTask, getTask } from "./taskController.js";
 
-// ----------------------------------------------------------------------------------------------------------------
-// Task create function 
+import Task from '../models/task.js';
+
 export const createTask = async (req, res) => {
-    const userId = req.userId;
-    const { title, description  } = req.body;
-    console.log(title, description);
+  const userId = req.userId; // Get userId from middleware (assuming protect middleware is set up)
+  const { title, description } = req.body;
 
-    try {
-        if (!title || !description ) {
-            return res.status(400).json({ errors: "All fields are required." });
-        }
+  if (!title || !description) {
+    return res.status(400).json({ errors: "All fields are required." });
+  }
 
-
-    
-        const taskData = {
-            title,
-            description,
-           
-        };
-        
-        const task = await Task.create(taskData);
-        res.json({
-            message: "Task Created Successfully",
-            task,
-        });
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: "Error creating task" });
-    }
+  try {
+    const task = new Task({ title, description, assignedTo: userId, status: 'To Do' });
+    await task.save();
+    res.status(201).json({ message: "Task Created Successfully", task });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error creating task" });
+  }
 };
+
 
 // Task update function
 export const updateTask = async (req, res) => {

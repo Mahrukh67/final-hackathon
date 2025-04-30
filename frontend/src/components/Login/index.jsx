@@ -15,14 +15,20 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:4003/api/auth/login"; // Correct URL for login
+      const url = "http://localhost:4003/api/auth/login";
       const payload = {
         email: data.email,
         password: data.password,
       };
       const { data: res } = await axios.post(url, payload);
-      // On successful login, navigate to the dashboard
-      navigate("/dashboard");
+  
+      // Save token and user info to localStorage
+      localStorage.setItem("token", res.token);
+      localStorage.setItem("user", JSON.stringify(res.user));
+  
+      // Navigate to home or dashboard
+      navigate("/");
+  
       console.log(res.message);
     } catch (error) {
       if (
@@ -30,12 +36,14 @@ const Login = () => {
         error.response.status >= 400 &&
         error.response.status <= 500
       ) {
-        setError(error.response.data.message); // Set error message from backend
+        setError(error.response.data.message);
       } else {
-        setError("Something went wrong! Please try again."); // Generic error message
+        setError("Something went wrong! Please try again.");
       }
     }
   };
+  
+  
 
   return (
     <div className={styles.login_container}>
